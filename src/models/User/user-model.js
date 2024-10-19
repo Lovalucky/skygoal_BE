@@ -5,14 +5,7 @@ const crypto = require("crypto");
 const date = new Date();
 
 const userSchema = new mongoose.Schema({
-firstname:{
-        type:String,
-        required:[true,'Please Enter Your First Name']
-    },
-lastname:{
-        type:String,
-        required:[true,'Please Enter Your Last Name']
-    },
+
   username:{
     type:String,
     required:[true,'Username is required'],
@@ -25,19 +18,13 @@ lastname:{
     lowercase:true,
     validate:[validator.isEmail,'Please Enter a Valid Email']
   },
-  profilePic:{
-    type:String,
-    default:"https://toppng.com/uploads/preview/instagram-default-profile-picture-11562973083brycehrmyv.png"
-  },
+  
   role: { 
     type: String,
     enum:['admin','user','stocker'],
     
   },
-  phone:{
-    type:Number,
-    required:[true,'Phone Number is required'],
-  },
+ 
   password: {
     type: String,
     required: [true,'Please Enter a password'],
