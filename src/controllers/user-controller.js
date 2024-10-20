@@ -52,24 +52,24 @@ exports.signup = AsyncErrorHandler(async (req, res, next) => {
 exports.login = AsyncErrorHandler(async (req, res, next) => {
   
  try{
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   // Check if username and password are provided
-  if (!username || !password) {
+  if (!email || !password) {
     const error = new CustomError(
-      "Please provide username and password for login",
+      "Please provide email and password for login",
       400
     );
     return next(error);
   }
   // Check if user exists and password is correct
-  const user = await User.findOne({ username }).select("+password");
+  const user = await User.findOne({ email }).select("+password");
   if(!user){
     
-    return next(new CustomError("Username is Not Found", 404));
+    return next(new CustomError("email is Not Found", 404));
   }
 
   if (!user || !(await user.comparePasswordInDB(password, user.password))) {
-    const error = new CustomError("Incorrect Username or password", 401);
+    const error = new CustomError("Incorrect email or password", 401);
     return next(error);
   }
   if (user.userActive === false) {
@@ -260,108 +260,9 @@ exports.resetPassword = AsyncErrorHandler(async (req, res, next) => {
   })
 })
 
-// Update Role Only
-exports.updateRole = AsyncErrorHandler(async (req, res, next) => {
-  try {
-    const { username, role, userActive } = req.body;
-    // Find and get the User by Username
-    const user = await User.findOne({ username });
-
-    if (!user) {
-      const error = new CustomError(" Username is not found!", 404);
-      return next(error);
-    }
-
-    const updatedUser = await User.findOneAndUpdate(
-      { username },
-      { username, role, userActive },
-      { new: true, runValidators: true }
-    )
-
-    res.status(200).json({
-      status: "success",
-      message: "User Status Successfully Updated ",
-      data: {
-        user: updatedUser,
-      },
-    })
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err.message,
-    })
-  }
-})
-
-
-// Update user For Admin 
-exports.updateUser =AsyncErrorHandler(async(req,res,next)=>{
-  try{
-      console.log("REQ BODY ::",req.body)
-      const {existusername}=req.body
-      const user = await User.findOne({username:existusername});
-      if(!user){
-          const error = new CustomError("Please provide Correct Username for Editing user",400);
-            return next(error);
-      }
-
-      const updatedUser= await username.findOneAndUpdate({username}, req.body, {new: true, runValidators: true});
 
 
 
-      res.status(200).send({
-          status:"success",
-          data:updatedUser
-      })
-
-  }catch(err){
-      console.log("ERROR Stack :",err.stack)
-      res.status(500).send({
-          status:"error",
-          message:"Internal Sever Error"
-      })
-  }
-})
-
-
-// Update user For Admin 
-exports.deleteUser =AsyncErrorHandler(async(req,res,next)=>{
-  try{
-      console.log("REQ BODY ::",req.body)
-      const {existusername}=req.body
-      const user = await User.findOne({username:existusername});
-      if(!user){
-          const error = new CustomError("Please provide Correct Username for Editing user",400);
-            return next(error);
-      }
-
-      const deleteUser= await User.findOneAndDelete({username:existusername});
-
-     if(deleteUser){
-      res.status(200).send({
-        status:"success",
-        message:"User Deleted Successfully ! "
-        // data:updatedUser
-    })
-     }else{
-      const error =CustomError('User not Delete ',400)
-      return next(error);
-     }
-
-     
-
-  }catch(err){
-      console.log("ERROR Stack :",err.stack)
-      res.status(500).send({
-          status:"error",
-          message:"Internal Sever Error"
-      })
-  }
-})
-
-
-
-// 
 exports.getAllUsers = AsyncErrorHandler(async (req,res,next)=>{
   try{
     const users = await User.find();

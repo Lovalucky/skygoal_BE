@@ -19,11 +19,7 @@ const userSchema = new mongoose.Schema({
     validate:[validator.isEmail,'Please Enter a Valid Email']
   },
   
-  role: { 
-    type: String,
-    enum:['admin','user','stocker'],
-    
-  },
+ 
  
   password: {
     type: String,
@@ -31,16 +27,7 @@ const userSchema = new mongoose.Schema({
     minlength:8,
     select:false
   },
-  confirmPassword: {
-    type: String,
-    required: [true, 'Please confirm your password.'],
-    validate: {
-        validator: function(val) {
-            return val === this.password;
-        },
-        message: 'Password and confirm password do not match.'
-    }
-},   
+
 
 status:{
     type:String,
@@ -58,7 +45,7 @@ status:{
       });
     }
   },
-  verificationToken: String, // For email verification
+  verificationToken: String, 
   passwordChangedAt:Date,
   passwordResetToken:String,
   passwordResetTokenExpires:Date,
@@ -92,9 +79,6 @@ userSchema.methods.createResetPasswordToken = function(){
     
    return resetToken;
 }
-
-
-
 
 //  Compile scheme into model
 const User = mongoose.model("User", userSchema);

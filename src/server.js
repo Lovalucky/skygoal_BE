@@ -9,7 +9,7 @@ process.on('uncaughtException', (err) => {
 })
 
 const app = require('./app')
-const port = process.env.PORT || 3007;
+const port = process.env.PORT || 3001;
 mongoose.connect(process.env.LOCAL_CONN_STR, {
     // Use the new URL parser
     useNewUrlParser: true,

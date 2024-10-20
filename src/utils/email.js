@@ -15,7 +15,7 @@ const sendEmail =async(option)=>{
 // console.log(transporter)
   //DEFINE EMAIL OPTIONS
   const emailOptions ={
-    from :'Arayas Kitchen support<support@arayaskitechen.com>',
+    from :'Sky Goal support<support@skygoal.com>',
     to:option.email,
     subject:option.subject,
     text:option.message
